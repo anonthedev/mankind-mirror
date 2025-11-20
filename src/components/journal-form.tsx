@@ -50,8 +50,8 @@ export function JournalForm({ initialData }: JournalFormProps) {
     }
 
     if (!editor || editor.isEmpty) {
-        toast.error("Please write some content");
-        return;
+      toast.error("Please write some content");
+      return;
     }
 
     setIsLoading(true);
@@ -93,11 +93,11 @@ export function JournalForm({ initialData }: JournalFormProps) {
   return (
     <div className="flex flex-col h-full w-full max-w-full">
       <div className="flex items-center justify-between mb-4">
-          <h1 className="text-3xl font-bold">
-            {initialData ? "Edit Journal" : "Write Your Thoughts"}
-          </h1>
+        <h1 className="text-3xl font-bold">
+          {initialData ? "Edit Journal" : "Write Your Thoughts"}
+        </h1>
       </div>
-      
+
       <form onSubmit={handleSubmit} className="space-y-4 flex-1 flex flex-col">
         <div className="space-y-2">
           <Label htmlFor="title">Title</Label>
@@ -110,13 +110,13 @@ export function JournalForm({ initialData }: JournalFormProps) {
             className="text-lg py-6"
           />
         </div>
-        
+
         <div className="space-y-2 flex-1 flex flex-col">
           <Label>Content</Label>
           <div className="flex flex-col gap-2 flex-1">
             <EditorToolbar editor={editor} />
             <div className="flex-1 min-h-[400px] border rounded-md p-2">
-                <EditorContent editor={editor} className="h-full" />
+              <EditorContent editor={editor} className="h-full" />
             </div>
           </div>
         </div>
