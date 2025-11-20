@@ -200,7 +200,7 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-300 via-orange-50 to-orange-300 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-orange-500 via-orange-100 to-orange-300 flex items-center justify-center">
         <div className="text-gray-800 text-lg font-light">
           Loading stories...
         </div>
@@ -209,7 +209,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-100 via-orange-50 to-orange-300">
+    <div className="min-h-screen bg-gradient-to-br from-orange-200 via-orange-100 to-orange-300">
       <div className="max-w-3xl mx-auto px-6 py-12">
         {/* Header Section */}
         <div className="mb-12">
@@ -235,7 +235,7 @@ export default function Home() {
             {posts.map((post, index) => (
               <div key={post.id} className="group">
                 {/* Main Card */}
-                <div className="bg-gray-800 rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+                <div className=" text-slate-900  border-2  border-slate-800 rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
                   {/* Header with date and icon */}
                   <div className="flex items-start justify-between mb-5">
                     <div className="flex items-center gap-3">
@@ -250,7 +250,7 @@ export default function Home() {
                   </div>
 
                   {/* Content */}
-                  <p className="text-white text-lg leading-relaxed mb-8 whitespace-pre-wrap font-light">
+                  <p className="text-slate-800 text-lg leading-relaxed mb-8 whitespace-pre-wrap font-light">
                     {post.content}
                   </p>
 
@@ -314,9 +314,9 @@ export default function Home() {
                           {post.comments.map((comment: any) => (
                             <div
                               key={comment.id}
-                              className="bg-gray-700 rounded-lg p-3"
+                              className="border-gray-800 rounded-lg p-3"
                             >
-                              <p className="text-gray-300 text-sm">
+                              <p className="text-slate-900 text-sm">
                                 {comment.text}
                               </p>
                               <p className="text-gray-500 text-xs mt-2">
@@ -362,7 +362,7 @@ export default function Home() {
                       ) : (
                         <button
                           onClick={() => setReplyingTo(post.id)}
-                          className="w-full bg-gray-700 text-orange-400 font-semibold py-2 rounded-lg hover:bg-gray-600 transition-colors text-sm"
+                          className="w-full bg-gray-700 text-white font-semibold py-2 rounded-lg hover:bg-gray-600 transition-colors text-sm"
                         >
                           Write a reply...
                         </button>
