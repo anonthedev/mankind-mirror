@@ -1,21 +1,21 @@
 import { createClient } from "@/utils/supabase/server";
-import type { Mood } from "@/types/database.types";
+import type { DailyProgress } from "@/types/database.types";
 
 /**
- * Calculate the mood streak for a user
- * A streak is maintained if the user has recorded a mood for consecutive days
+ * Calculate the streak for a user
+ * A streak is maintained if the user has recorded daily progress for consecutive days
  */
 export async function calculateMoodStreak(userId: string): Promise<number> {
   const supabase = await createClient();
 
-  // Fetch all mood entries for the user, ordered by date descending
-  const { data: moods, error } = await supabase
-    .from("mood")
+  // Fetch all progress entries for the user, ordered by date descending
+  const { data: progress, error } = await supabase
+    .from("daily_progress")
     .select("created_at")
     .eq("user_id", userId)
     .order("created_at", { ascending: false });
 
-  if (error || !moods || moods.length === 0) {
+  if (error || !progress || progress.length === 0) {
     return 0;
   }
 
@@ -23,29 +23,29 @@ export async function calculateMoodStreak(userId: string): Promise<number> {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  // Check if there's a mood entry for today or yesterday
+  // Check if there's a progress entry for today or yesterday
   // We use the most recent entry to start the check
-  const mostRecentDate = new Date(moods[0].created_at);
+  const mostRecentDate = new Date(progress[0].created_at);
   mostRecentDate.setHours(0, 0, 0, 0);
 
   const daysDiff = Math.floor((today.getTime() - mostRecentDate.getTime()) / (1000 * 60 * 60 * 24));
 
   // If the most recent entry is more than 1 day old (e.g. 2 days ago), streak is broken/reset.
-  // However, since we calculate streak based on history, if the user just recorded a mood (today),
+  // However, since we calculate streak based on history, if the user just recorded progress (today),
   // daysDiff should be 0.
   if (daysDiff > 1) {
     return 0;
   }
 
   // Count consecutive days
-  const moodDates = moods.map(m => {
-    const d = new Date(m.created_at);
+  const progressDates = progress.map(p => {
+    const d = new Date(p.created_at);
     d.setHours(0, 0, 0, 0);
     return d.getTime();
   });
 
   // Remove duplicates (same day entries)
-  const uniqueDates = [...new Set(moodDates)].sort((a, b) => b - a);
+  const uniqueDates = [...new Set(progressDates)].sort((a, b) => b - a);
 
   streak = 1; // Count the first entry
   for (let i = 1; i < uniqueDates.length; i++) {
@@ -64,7 +64,7 @@ export async function calculateMoodStreak(userId: string): Promise<number> {
 }
 
 /**
- * Check if user has already recorded mood today
+ * Check if user has already recorded progress today
  */
 export async function hasMoodToday(userId: string): Promise<boolean> {
   const supabase = await createClient();
@@ -75,7 +75,7 @@ export async function hasMoodToday(userId: string): Promise<boolean> {
   tomorrow.setDate(tomorrow.getDate() + 1);
 
   const { data, error } = await supabase
-    .from("mood")
+    .from("daily_progress")
     .select("id")
     .eq("user_id", userId)
     .gte("created_at", today.toISOString())
@@ -86,9 +86,9 @@ export async function hasMoodToday(userId: string): Promise<boolean> {
 }
 
 /**
- * Get today's mood for a user
+ * Get today's progress for a user
  */
-export async function getTodayMood(userId: string): Promise<string | null> {
+export async function getTodayMood(userId: string): Promise<DailyProgress | null> {
   const supabase = await createClient();
 
   const today = new Date();
@@ -97,8 +97,8 @@ export async function getTodayMood(userId: string): Promise<string | null> {
   tomorrow.setDate(tomorrow.getDate() + 1);
 
   const { data, error } = await supabase
-    .from("mood")
-    .select("mood")
+    .from("daily_progress")
+    .select("*")
     .eq("user_id", userId)
     .gte("created_at", today.toISOString())
     .lt("created_at", tomorrow.toISOString())
@@ -109,25 +109,33 @@ export async function getTodayMood(userId: string): Promise<string | null> {
     return null;
   }
 
-  return data.mood;
+  return data;
 }
 
 /**
- * Record a mood and update streak
+ * Record progress and update streak
  */
-export async function recordMood(userId: string, mood: string): Promise<{ success: boolean; error?: string }> {
+export async function recordMood(
+  userId: string, 
+  data: { mood: string; sleep: string; gratefulness: string[] }
+): Promise<{ success: boolean; error?: string }> {
   const supabase = await createClient();
 
-  // Check if mood already recorded today
+  // Check if progress already recorded today
   const hasToday = await hasMoodToday(userId);
   if (hasToday) {
-    return { success: false, error: "Mood already recorded for today" };
+    return { success: false, error: "Progress already recorded for today" };
   }
 
-  // Insert mood entry
+  // Insert progress entry
   const { error: insertError } = await supabase
-    .from("mood")
-    .insert({ user_id: userId, mood });
+    .from("daily_progress")
+    .insert({ 
+      user_id: userId, 
+      mood: data.mood,
+      sleep: data.sleep,
+      gratefulness: data.gratefulness
+    });
 
   if (insertError) {
     return { success: false, error: insertError.message };
@@ -137,7 +145,6 @@ export async function recordMood(userId: string, mood: string): Promise<{ succes
   const newStreak = await calculateMoodStreak(userId);
 
   // Update or Insert user profile with new streak
-  // We use upsert to handle cases where the profile might not exist yet
   const { error: updateError } = await supabase
     .from("user_profile")
     .upsert(
@@ -146,9 +153,7 @@ export async function recordMood(userId: string, mood: string): Promise<{ succes
     );
 
   if (updateError) {
-    // Don't fail the whole request if streak update fails, but log it
     console.error("Failed to update streak:", updateError);
-    // return { success: false, error: updateError.message };
   }
 
   return { success: true };

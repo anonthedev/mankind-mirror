@@ -18,16 +18,23 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { mood } = body;
+    const { mood, sleep, gratefulness } = body;
 
-    if (!mood) {
+    if (!mood || !sleep || !gratefulness) {
       return NextResponse.json(
-        { success: false, error: "Mood is required" },
+        { success: false, error: "All fields (mood, sleep, gratefulness) are required" },
         { status: 400 }
       );
     }
 
-    const result = await recordMood(user.id, mood);
+    if (!Array.isArray(gratefulness) || gratefulness.length !== 3) {
+        return NextResponse.json(
+            { success: false, error: "Please provide exactly 3 things you are grateful for" },
+            { status: 400 }
+        );
+    }
+
+    const result = await recordMood(user.id, { mood, sleep, gratefulness });
 
     if (!result.success) {
       return NextResponse.json(

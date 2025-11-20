@@ -13,7 +13,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
-import { Plus, Home, User, BookOpen, Flame, Trophy } from "lucide-react";
+import { Plus, Home, User, BookOpen, Flame, Trophy, Brain, ClipboardList } from "lucide-react";
 import { SidebarCreatePost } from "@/components/sidebar-create-post";
 import { SidebarMoodTracker } from "@/components/mood-tracker";
 import { SignOutButton } from "@/components/sign-out-button";
@@ -88,6 +88,24 @@ export async function AppSidebar() {
                   <Link href="/journals/create">
                     <Plus />
                     <span>New Journal</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild tooltip="Exercises">
+                  <Link href="/exercises">
+                    <Brain />
+                    <span>Exercises</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild tooltip="Mental Health Tests">
+                  <Link href="/tests">
+                    <ClipboardList />
+                    <span>Tests</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

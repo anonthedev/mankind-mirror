@@ -32,24 +32,30 @@ export interface Database {
           content?: string | null
         }
       }
-      mood: {
+      daily_progress: {
         Row: {
           id: string
           created_at: string
-          mood: string | null
           user_id: string | null
+          mood: string | null
+          sleep: string | null
+          gratefulness: string[] | null
         }
         Insert: {
           id?: string
           created_at?: string
-          mood?: string | null
           user_id?: string | null
+          mood?: string | null
+          sleep?: string | null
+          gratefulness?: string[] | null
         }
         Update: {
           id?: string
           created_at?: string
-          mood?: string | null
           user_id?: string | null
+          mood?: string | null
+          sleep?: string | null
+          gratefulness?: string[] | null
         }
       }
       posts: {
@@ -98,7 +104,7 @@ export interface Database {
 
 // Helper types
 export type Journal = Database['public']['Tables']['journal']['Row']
-export type Mood = Database['public']['Tables']['mood']['Row']
+export type DailyProgress = Database['public']['Tables']['daily_progress']['Row']
 export type Post = Database['public']['Tables']['posts']['Row']
 export type UserProfile = Database['public']['Tables']['user_profile']['Row']
 
