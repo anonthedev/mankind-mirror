@@ -16,6 +16,7 @@ import Link from "next/link";
 import { Plus, Home, User, BookOpen, Flame, Trophy } from "lucide-react";
 import { SidebarCreatePost } from "@/components/sidebar-create-post";
 import { SidebarMoodTracker } from "@/components/mood-tracker";
+import { SignOutButton } from "@/components/sign-out-button";
 
 export async function AppSidebar() {
   const supabase = await createClient();
@@ -140,12 +141,17 @@ export async function AppSidebar() {
             )}
             <SidebarMenuItem>
                  {user ? (
+                   <>
                     <SidebarMenuButton asChild tooltip="Profile">
                          <Link href="/profile">
                             <User />
                             <span>Profile</span>
                          </Link>
                     </SidebarMenuButton>
+                    <SidebarMenuItem>
+                      <SignOutButton />
+                    </SidebarMenuItem>
+                   </>
                  ) : (
                      <SidebarMenuButton asChild tooltip="Sign In">
                          <Link href="/auth/sign-in">
