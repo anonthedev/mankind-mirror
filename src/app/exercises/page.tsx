@@ -12,19 +12,19 @@ import { Label } from "@/components/ui/label";
 
 export default function ExercisesPage() {
   return (
-    <div className="container max-w-4xl py-6 space-y-8 min-h-[calc(100vh-8rem)] flex flex-col items-center justify-center mx-auto">
+    <div className="container max-w-4xl py-4 md:py-6 space-y-6 md:space-y-8 min-h-[calc(100vh-8rem)] flex flex-col items-center justify-center mx-auto px-4">
       <div className="space-y-2 text-center">
-        <h1 className="text-3xl font-bold tracking-tight">Mental Health Exercises</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Mental Health Exercises</h1>
+        <p className="text-sm md:text-base text-muted-foreground">
           Take a moment to ground yourself with these simple exercises. No tracking, just presence.
         </p>
       </div>
 
       <Tabs defaultValue="box-breathing" className="w-full flex flex-col items-center">
-        <TabsList className="grid w-full grid-cols-3 lg:w-[400px]">
-          <TabsTrigger value="box-breathing">Box Breathing</TabsTrigger>
-          <TabsTrigger value="4-7-8">4-7-8 Relax</TabsTrigger>
-          <TabsTrigger value="grounding">Grounding</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-3 max-w-full lg:w-[400px]">
+          <TabsTrigger value="box-breathing" className="text-xs md:text-sm px-2 md:px-3">Box Breathing</TabsTrigger>
+          <TabsTrigger value="4-7-8" className="text-xs md:text-sm px-2 md:px-3">4-7-8 Relax</TabsTrigger>
+          <TabsTrigger value="grounding" className="text-xs md:text-sm px-2 md:px-3">Grounding</TabsTrigger>
         </TabsList>
         <TabsContent value="box-breathing" className="mt-6 w-full max-w-2xl">
           <BoxBreathing />

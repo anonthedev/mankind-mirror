@@ -71,6 +71,7 @@ export function CreatePostModal({ open, onOpenChange }: CreatePostModalProps) {
               onChange={(e) => setContent(e.target.value)}
               className="min-h-[150px] resize-none"
               maxLength={maxCharacters}
+              disabled={isLoading}
             />
             <div className="flex justify-between items-center text-sm text-muted-foreground">
               <span>Your post will be anonymous</span>

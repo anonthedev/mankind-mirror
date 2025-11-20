@@ -70,11 +70,11 @@ export function JournalChat() {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="bg-background border border-accent rounded-md flex flex-col h-full">
       {/* Messages */}
       <div className="flex-1 overflow-y-auto space-y-4 p-4">
         {messages.length === 0 && (
-          <div className="flex items-center justify-center h-full text-gray-500">
+          <div className="flex items-center justify-center h-full text-muted-foreground">
             <p>Ask me anything about your journals...</p>
           </div>
         )}
@@ -89,20 +89,23 @@ export function JournalChat() {
             <Card
               className={`max-w-xs lg:max-w-md p-3 ${
                 msg.type === "question"
-                  ? "bg-blue-500 text-white rounded-lg"
-                  : "bg-gray-100 text-gray-900 rounded-lg"
+                  ? "bg-primary text-primary-foreground rounded-lg"
+                  : "bg-muted text-foreground rounded-lg"
               }`}
             >
-              <p className="text-sm">{msg.content}</p>
+              <p className="text-md font-semibold">{msg.content}</p>
 
               {msg.sources && msg.sources.length > 0 && (
-                <div className="mt-3 pt-3 border-t border-gray-300 space-y-2">
+                <div className="mt-3 pt-3 border-t border-border space-y-2">
                   <p className="text-xs font-semibold">Sources:</p>
                   {msg.sources.map((source, idx) => (
-                    <div key={idx} className="text-xs bg-gray-200 p-2 rounded">
+                    <div key={idx} className="text-xs bg-accent p-2 rounded">
                       <p className="font-semibold">Match {idx + 1}</p>
-                      <p className="italic text-gray-700">{source.excerpt}</p>
-                      <p className="text-gray-600">
+                      <div 
+                        className="italic text-muted-foreground"
+                        dangerouslySetInnerHTML={{ __html: source.excerpt }}
+                      />
+                      <p className="text-muted-foreground">
                         Similarity: {(source.similarity * 100).toFixed(1)}%
                       </p>
                     </div>
@@ -115,8 +118,8 @@ export function JournalChat() {
 
         {loading && (
           <div className="flex justify-start">
-            <div className="bg-gray-100 p-3 rounded-lg">
-              <Loader2 className="w-5 h-5 animate-spin" />
+            <div className="bg-muted p-3 rounded-lg">
+              <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
             </div>
           </div>
         )}

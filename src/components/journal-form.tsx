@@ -92,12 +92,6 @@ export function JournalForm({ initialData }: JournalFormProps) {
 
   return (
     <div className="flex flex-col h-full w-full max-w-full">
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-3xl font-bold">
-          {initialData ? "Edit Journal" : "Write Your Thoughts"}
-        </h1>
-      </div>
-
       <form onSubmit={handleSubmit} className="space-y-4 flex-1 flex flex-col">
         <div className="space-y-2">
           <Label htmlFor="title">Title</Label>

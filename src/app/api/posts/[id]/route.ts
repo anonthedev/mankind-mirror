@@ -1,5 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import { NextResponse } from "next/server";
+import { isContentSafe } from "@/utils/moderation";
 
 export async function PUT(
   request: Request,
@@ -25,6 +26,26 @@ export async function PUT(
     }
 
     if (body.comments !== undefined) {
+      // If comments are being added, moderate the new comment
+      if (Array.isArray(body.comments) && body.comments.length > 0) {
+        const lastComment = body.comments[body.comments.length - 1];
+        
+        // Moderate the new comment text
+        if (lastComment && lastComment.text) {
+          const moderationCheck = await isContentSafe(lastComment.text);
+          if (!moderationCheck.isSafe) {
+            return NextResponse.json(
+              { 
+                success: false, 
+                error: moderationCheck.message || "Comment violates community guidelines",
+                flagged: true
+              },
+              { status: 400 }
+            );
+          }
+        }
+      }
+      
       updateData.comments = body.comments;
     }
 

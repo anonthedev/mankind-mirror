@@ -13,7 +13,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
-import { Plus, Home, User, BookOpen, Flame, Trophy, Brain, ClipboardList } from "lucide-react";
+import { Plus, Home, User, BookOpen, Flame, Trophy, Brain, ClipboardList, MessageCircle, ShieldCheck } from "lucide-react";
 import { SidebarCreatePost } from "@/components/sidebar-create-post";
 import { SidebarMoodTracker } from "@/components/mood-tracker";
 import { SignOutButton } from "@/components/sign-out-button";
@@ -52,7 +52,7 @@ export async function AppSidebar() {
             <SidebarMenuButton size="lg" asChild>
               <Link href="/">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <Home className="size-4" />
+                  <ShieldCheck className="size-4 font-bold" strokeWidth={2} />
                 </div>
                 <div className="flex flex-col gap-0.5 leading-none">
                   <span className="font-semibold">MankindMirror</span>
@@ -123,13 +123,15 @@ export async function AppSidebar() {
           <SidebarGroup>
             <SidebarGroupLabel>Your Journals</SidebarGroupLabel>
             <SidebarGroupContent>
-              <SidebarMenuButton asChild tooltip="Home">
-                <Link href="/journals/chat">
-                  <Home />
-                  <span>Chat with yourself</span>
-                </Link>
-              </SidebarMenuButton>
               <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild tooltip="Home">
+                    <Link href="/journals/chat">
+                      <MessageCircle />
+                      <span>Chat with yourself</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
                 {journals.map((journal) => (
                   <SidebarMenuItem key={journal.id}>
                     <SidebarMenuButton
@@ -176,28 +178,30 @@ export async function AppSidebar() {
               </SidebarMenuButton>
             </SidebarMenuItem>
           )}
-          <SidebarMenuItem>
-            {user ? (
-              <>
+          {user ? (
+            <>
+              <SidebarMenuItem>
                 <SidebarMenuButton asChild tooltip="Profile">
                   <Link href="/profile">
                     <User />
                     <span>Profile</span>
                   </Link>
                 </SidebarMenuButton>
-                <SidebarMenuItem>
-                  <SignOutButton />
-                </SidebarMenuItem>
-              </>
-            ) : (
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SignOutButton />
+              </SidebarMenuItem>
+            </>
+          ) : (
+            <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip="Sign In">
                 <Link href="/auth/sign-in">
                   <User />
                   <span>Sign In</span>
                 </Link>
               </SidebarMenuButton>
-            )}
-          </SidebarMenuItem>
+            </SidebarMenuItem>
+          )}
         </SidebarMenu>
       </SidebarFooter>
       <SidebarRail />

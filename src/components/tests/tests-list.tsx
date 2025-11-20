@@ -11,7 +11,7 @@ type TestsListProps = {
 
 export function TestsList({ onSelectTest }: TestsListProps) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 p-6">
+    <div className="min-h-screen bg-background p-6">
       <div className="max-w-6xl mx-auto space-y-6">
         <div className="text-center space-y-2 mb-8">
           <h1 className="text-4xl font-bold">Mental Health Assessments</h1>

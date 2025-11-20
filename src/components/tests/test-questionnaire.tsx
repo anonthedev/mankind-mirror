@@ -29,12 +29,12 @@ export function TestQuestionnaire({
   const progress = (Object.keys(answers).length / testData.questions.length) * 100;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 p-6">
-      <div className="max-w-4xl mx-auto space-y-6">
+    <div className="bg-background min-h-screen p-4 md:p-6">
+      <div className="max-w-4xl mx-auto space-y-4 md:space-y-6">
         <Button
           variant="ghost"
           onClick={onBack}
-          className="mb-4"
+          className="mb-2 md:mb-4"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Tests
@@ -42,22 +42,22 @@ export function TestQuestionnaire({
 
         <Card className="border-2">
           <CardHeader>
-            <CardTitle className="text-3xl">{testData.fullName}</CardTitle>
-            <CardDescription className="text-base">
+            <CardTitle className="text-2xl md:text-3xl">{testData.fullName}</CardTitle>
+            <CardDescription className="text-sm md:text-base">
               {testData.description}
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-4 md:space-y-6">
             <Alert>
               <Info className="h-4 w-4" />
-              <AlertTitle>Instructions</AlertTitle>
-              <AlertDescription>
+              <AlertTitle className="text-sm md:text-base">Instructions</AlertTitle>
+              <AlertDescription className="text-xs md:text-sm">
                 {testData.instructions} Please answer all questions honestly for the most accurate results.
               </AlertDescription>
             </Alert>
 
             <div className="space-y-2">
-              <div className="flex justify-between text-sm text-muted-foreground mb-1">
+              <div className="flex justify-between text-xs md:text-sm text-muted-foreground mb-1">
                 <span>Progress</span>
                 <span>
                   {Object.keys(answers).length} of {testData.questions.length} completed
@@ -66,14 +66,14 @@ export function TestQuestionnaire({
               <Progress value={progress} className="h-2" />
             </div>
 
-            <div className="space-y-8">
+            <div className="space-y-4 md:space-y-8">
               {testData.questions.map((q, index) => (
                 <Card
                   key={q.id}
                   className={answers[q.id] !== undefined ? "border-primary" : ""}
                 >
-                  <CardHeader>
-                    <CardTitle className="text-lg font-medium">
+                  <CardHeader className="pb-3 md:pb-6">
+                    <CardTitle className="text-base md:text-lg font-medium leading-snug">
                       {index + 1}. {q.question}
                     </CardTitle>
                   </CardHeader>
@@ -82,16 +82,16 @@ export function TestQuestionnaire({
                       value={answers[q.id]?.toString()}
                       onValueChange={(value) => onAnswerChange(q.id, parseInt(value))}
                     >
-                      <div className="space-y-3">
+                      <div className="space-y-2 md:space-y-3">
                         {RESPONSE_OPTIONS.map((option) => (
-                          <div key={option.value} className="flex items-center space-x-3">
+                          <div key={option.value} className="flex items-center space-x-2 md:space-x-3">
                             <RadioGroupItem
                               value={option.value.toString()}
                               id={`${testType}-q${q.id}-${option.value}`}
                             />
                             <Label
                               htmlFor={`${testType}-q${q.id}-${option.value}`}
-                              className="flex-1 cursor-pointer font-normal"
+                              className="flex-1 cursor-pointer font-normal text-sm md:text-base"
                             >
                               {option.label}
                             </Label>
@@ -109,11 +109,11 @@ export function TestQuestionnaire({
                 onClick={onSubmit}
                 disabled={!isTestComplete}
                 size="lg"
-                className="min-w-[200px]"
+                className="min-w-[160px] md:min-w-[200px] text-sm md:text-base"
               >
                 {isTestComplete
                   ? "View Results"
-                  : `Complete All Questions (${Object.keys(answers).length}/${testData.questions.length})`}
+                  : `Complete All (${Object.keys(answers).length}/${testData.questions.length})`}
               </Button>
             </div>
           </CardContent>
@@ -121,9 +121,9 @@ export function TestQuestionnaire({
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">About the {testData.name}</CardTitle>
+            <CardTitle className="text-base md:text-lg">About the {testData.name}</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4 text-sm text-muted-foreground">
+          <CardContent className="space-y-3 md:space-y-4 text-xs md:text-sm text-muted-foreground">
             <p>{testData.about}</p>
             <div>
               <p className="font-semibold text-foreground mb-2">Scoring Interpretation:</p>
